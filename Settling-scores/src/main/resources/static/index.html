@@ -1,0 +1,70 @@
+<html>
+	<head>
+		<title> Rock Paper Scissors App</title>
+		<style>
+		        body {
+		            background-image: url('/paper.jpg');
+		            background-size: cover; /* Makes the image cover the whole page */
+		            background-repeat: no-repeat; /* Ensures the image doesn't repeat */
+		            background-position: center; /* Centers the image */
+		            color: white; /* Changes text color to white for better contrast */
+		        }
+		        a {
+		            color: white; /* Ensures the links are visible on the background */
+		        }
+		    </style>
+	</head>
+	<body>
+		Which one will it be ? <br/><br/>
+		<a href="#" onclick = "playTheGame('ROCK')"> rock </a> &nbsp; &nbsp;
+		<a href="#" onclick="playTheGame ('PAPER')">paper</a> &nbsp; &nbsp; 
+		<a href ="#" onclick="playTheGame('SCISSOR')">scissor</a> &nbsp; &nbsp;
+		
+		<hr/><br/>
+		
+		<i><div id="result"></div></i>
+		<br/>
+		<span id="wins"></span><span id="losses"></span><span id="ties"></span>
+		
+	</body>
+	
+	<script>
+		
+		playTheGame = async function(clientGesture) {
+			
+			url = "http://localhost:8080/api/score/wins";
+			result = "wins";
+			
+			if(clientGesture == 'ROCK') {
+				
+				result = "tie";
+				url = "http://localhost:8080/api/score/ties";
+			}
+			
+			if(clientGesture == 'SCISSOR') {
+				
+				result = "losses";
+				url ="http://localhost:8080/api/score/losses";
+			}
+			
+			try {
+				
+				const response = await fetch(url, {method: "POST"});
+				const theScore = await response.json();
+				document.getElementById('wins').innerHTML = " <b> Wins: </b>" + theScore.wins;
+				document.getElementById('losses').innerHTML = "<b> Losses: </b>" + theScore.losses;
+				document.getElementById('ties').innerHTML = " <b> Ties : </b>" + theScore.ties;
+				document.getElementById('result').innerHTML = "The result was a : " + result;
+			} catch(error) {
+				
+				console.log(error.message);
+			}
+			
+			
+			
+			document.getElementById('results').innerHTML = "The result was a : " + result;
+		}
+		
+	</script>
+	
+</html>
